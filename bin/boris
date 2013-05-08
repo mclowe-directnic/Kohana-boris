@@ -1,12 +1,19 @@
-#!/usr/bin/env php
+#!/usr/bin/php
 <?php
-
-/* vim: set shiftwidth=2 expandtab softtabstop=2: */
 
 require_once __DIR__.'/../lib/autoload.php';
 
-$boris  = new \Boris\Boris();
+$boris  = new \Boris\Boris("app> ");
+$boris->onStart(function($worker, $scope){
+  extract($scope); // we could also just access specific vars by key
 
+  echo "\n\nKohana is available in this scope\n\n";
+  require_once __DIR__.'/../lib/env.php';
+  while (@ob_end_flush());
+
+});
+
+$boris->setInspector(new \Boris\KohanaInspector());
 $config = new \Boris\Config();
 $config->apply($boris, true);
 
